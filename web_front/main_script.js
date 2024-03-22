@@ -58,6 +58,7 @@ function renderMaterial(material) {
         <p>描述: ${material.description}</p>
         <button onclick="deleteMaterial('${material.id}', '${material.name}')">删除</button>
         <button onclick="showEditForm('${material.id}', '${material.name}', '${material.description}', '${material.location}')">编辑</button>
+        <button onclick="showHistory('${material.id}')">详情</button>
     `;
     materialList.appendChild(materialItem);
 }
@@ -105,6 +106,7 @@ editMaterialForm.addEventListener('submit', event => {
 
             <button onclick="deleteMaterial('${updatedMaterial.id}', '${updatedMaterial.name}')">删除</button>
             <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
+            <button onclick="showHistory('${updatedMaterial.id}')">详情</button>
         `;
         editForm.style.display = 'none';
     });
@@ -130,4 +132,79 @@ function deleteMaterial(id, name) {
             materialItem.remove();
         });
     }
+}
+
+// 辅助函数：通过ID查询物品信息
+function getMaterialById(id) {
+    return fetch(`http://${address}:6001/materials/${id}`)
+        .then(response => response.json());
+}
+
+// 显示物品历史记录
+function showHistory(id) {
+    fetch(`http://${address}:6001/materials/${id}/history`)
+        .then(response => response.json())
+        .then(history => {
+            renderHistory(id, history);
+        });
+}
+
+// 渲染物品历史记录
+function renderHistory(id, history) {
+    // 清空页面
+    getMaterialById(id).then(material => {
+        const name = material.name;
+        const photo = material.photo;
+        const description = material.description;
+        const location = material.location;
+        
+        const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
+
+        materialItem.innerHTML = `
+            <img src="${photo}" alt="${name}">
+            <p>ID: ${id}</p>
+            
+            <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
+            <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
+            <button onclick="rerender('${id}')">隐藏</button>
+            
+            <ul id="${id}-historyList"></ul>
+        `;
+
+        // 渲染历史记录列表
+        const historyList = document.getElementById(`${id}-historyList`);
+        history.forEach(entry => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <p>时间戳: ${entry.timestamp}</p>
+                <p>名称: ${entry.name}</p>
+                <p>位置: ${entry.location}</p>
+                <p>描述: ${entry.description}</p>
+            `;
+            historyList.appendChild(listItem);
+        });
+    })
+}
+
+function rerender(index) {
+    getMaterialById(index)
+        .then(material => {
+            const id = material.id;
+            const name = material.name;
+            const photo = material.photo;
+            const description = material.description;
+            const location = material.location;
+            const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
+            materialItem.innerHTML = `
+                <img src="${photo}" alt="${name}">
+                <p>ID: ${id}</p>
+                <p>名称: ${name}</p>
+                <p>位置: ${location}</p>
+                <p>描述: ${description}</p>
+
+                <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
+                <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
+                <button onclick="showHistory('${id}')">详情</button>
+            `;
+        })
 }

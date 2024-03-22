@@ -56,17 +56,26 @@ def schedule_loop():
 # 获取所有物资
 @app.route('/materials', methods=['GET'])
 def get_materials():
-    return jsonify(materials)
+    result = []
+    for material in materials:
+        latest_version = material['history'][-1] if material['history'] else {}
+        result.append({
+            'id': material['id'],
+            'photo': material['photo'],
+            'name': latest_version.get('name', ''),
+            'location': latest_version.get('location', ''),
+            'description': latest_version.get('description', '')
+        })
+    return jsonify(result)
 
 # 添加物资
 @app.route('/materials', methods=['POST'])
 def add_material():
     data = request.form
     id = str(uuid4())  # 自动生成唯一ID
-    name = data['name']
-    description = data.get('description', '')
-    location = data['location']
-    
+
+    history_entry = {'name': data.get('name', ''), 'description': data.get('description', ''), 
+                             'location': data.get('location', ''), 'timestamp': datetime.datetime.now().isoformat()}
     # 保存上传的图片
     if 'photo' in request.files:
         photo = request.files['photo']
@@ -76,13 +85,24 @@ def add_material():
     else:
         filename = ''
 
-    new_material = {'id': id, 'name': name, 'photo': filename, 'description': description, 'location': location}
+    new_material = {'id': id, 'photo': filename, 'history': []}
+    new_material['history'].append(history_entry)
+
+    return_material = {
+                    'id': id, 
+                    'photo': new_material['photo'],
+                    'name': history_entry['name'], 
+                    'location': history_entry['location'], 
+                    'description': history_entry['description'],
+                }
+
     materials.append(new_material)
+    
     # 更新数据文件
     with open(DATA_FILE, 'w') as f:
         json.dump(materials, f)
     
-    return jsonify(new_material), 201
+    return jsonify(return_material), 201
 
 # 删除物资
 @app.route('/materials/<string:id>', methods=['DELETE'])
@@ -101,9 +121,6 @@ def update_material(id):
 
     for material in materials:
         if material['id'] == id:
-            material['name'] = data.get('name', material['name'])
-            material['description'] = data.get('description', material['description'])
-            material['location'] = data.get('location', material['location'])
         
             if 'photo' in request.files:
                 photo = request.files['photo']
@@ -113,13 +130,51 @@ def update_material(id):
                 if (os.path.exists(os.path.join(FRONT_ROOT, material['photo']))):
                     os.remove(os.path.join(FRONT_ROOT, material['photo']))
                 material['photo'] = filename
+            
+            history_entry = {'name': data.get('name', ''), 'description': data.get('description', ''), 
+                             'location': data.get('location', ''), 'timestamp': datetime.datetime.now().isoformat()}
+
+            return_material = {
+                'id': id, 
+                'photo': material['photo'],
+                'name': history_entry['name'], 
+                'location': history_entry['location'], 
+                'description': history_entry['description'],
+            }
+
+            material['history'].append(history_entry)
 
             # 更新数据文件
             with open(DATA_FILE, 'w') as f:
                 json.dump(materials, f)
-            return jsonify(material), 201
+            return jsonify(return_material), 201
 
     return jsonify({'error': 'Material not found'}), 404  
+
+# 获取单个物品的信息（包括最新版本的名称、位置、描述）
+@app.route('/materials/<string:id>', methods=['GET'])
+def get_material(id):
+    material = next((m for m in materials if m['id'] == id), None)
+    if material:
+        latest_version = material['history'][-1] if material['history'] else {}
+        return jsonify({
+            'id': material['id'],
+            'photo': material['photo'],
+            'name': latest_version.get('name', ''),
+            'location': latest_version.get('location', ''),
+            'description': latest_version.get('description', '')
+        })
+    else:
+        return jsonify({'error': 'Material not found'}), 404
+
+# 获取单个物品的历史记录
+@app.route('/materials/<string:id>/history', methods=['GET'])
+def get_material_history(id):
+    material = next((m for m in materials if m['id'] == id), None)
+    if material:
+        return jsonify(material['history'])
+    else:
+        return jsonify({'error': 'Material not found'}), 404
 
 
 if __name__ == '__main__':
