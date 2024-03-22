@@ -1,0 +1,5 @@
+webfront/images
+python_back/data
+*.pyc
+*.pyd
+*.pyo
