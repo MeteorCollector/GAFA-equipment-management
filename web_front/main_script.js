@@ -51,14 +51,20 @@ function renderMaterial(material) {
     const materialItem = document.createElement('div');
     materialItem.dataset.id = material.id;
     materialItem.innerHTML = `
-        <img src="${material.photo}" alt="${material.name}">
-        <p>ID: ${material.id}</p>
-        <p>名称: ${material.name}</p>
-        <p>位置: ${material.location}</p>
-        <p>描述: ${material.description}</p>
-        <button onclick="deleteMaterial('${material.id}', '${material.name}')">删除</button>
-        <button onclick="showEditForm('${material.id}', '${material.name}', '${material.description}', '${material.location}')">编辑</button>
-        <button onclick="showHistory('${material.id}')">详情</button>
+        <div class="card">
+            <div class="square-image">
+                <img src="${material.photo}" alt="${material.name}">
+            </div>
+            <div class="info">
+                <p>ID: ${material.id}</p>
+                <p>名称: ${material.name}</p>
+                <p>位置: ${material.location}</p>
+                <p>描述: ${material.description}</p>
+                <button onclick="deleteMaterial('${material.id}', '${material.name}')">删除</button>
+                <button onclick="showEditForm('${material.id}', '${material.name}', '${material.description}', '${material.location}')">编辑</button>
+                <button onclick="showHistory('${material.id}')">详情</button>
+            </div>
+        </div>
     `;
     materialList.appendChild(materialItem);
 }
@@ -98,15 +104,20 @@ editMaterialForm.addEventListener('submit', event => {
     .then(updatedMaterial => {
         const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
         materialItem.innerHTML = `
-            <img src="${updatedMaterial.photo}" alt="${updatedMaterial.name}">
-            <p>ID: ${updatedMaterial.id}</p>
-            <p>名称: ${updatedMaterial.name}</p>
-            <p>位置: ${updatedMaterial.location}</p>
-            <p>描述: ${updatedMaterial.description}</p>
-
-            <button onclick="deleteMaterial('${updatedMaterial.id}', '${updatedMaterial.name}')">删除</button>
-            <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
-            <button onclick="showHistory('${updatedMaterial.id}')">详情</button>
+            <div class="card">
+                <div class="square-image">
+                    <img src="${updatedMaterial.photo}" alt="${updatedMaterial.name}">
+                </div>
+                <div class="info">
+                    <p>ID: ${updatedMaterial.id}</p>
+                    <p>名称: ${updatedMaterial.name}</p>
+                    <p>位置: ${updatedMaterial.location}</p>
+                    <p>描述: ${updatedMaterial.description}</p>
+                    <button onclick="deleteMaterial('${updatedMaterial.id}', '${updatedMaterial.name}')">删除</button>
+                    <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
+                    <button onclick="showHistory('${updatedMaterial.id}')">详情</button>
+                </div>
+            </div>
         `;
         editForm.style.display = 'none';
     });
@@ -161,14 +172,23 @@ function renderHistory(id, history) {
         const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
 
         materialItem.innerHTML = `
-            <img src="${photo}" alt="${name}">
-            <p>ID: ${id}</p>
-            
-            <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
-            <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
-            <button onclick="rerender('${id}')">隐藏</button>
-            
-            <ul id="${id}-historyList"></ul>
+            <div class="card">
+                <div class="square-image">
+                    <img src="${photo}" alt="${name}">
+                </div>
+                <div class="info">
+                    <p>ID: ${id}</p>
+                    <p>名称: ${name}</p>
+                    <p>位置: ${location}</p>
+                    <p>描述: ${description}</p>
+                    <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
+                    <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
+                    <button onclick="rerender('${id}')">隐藏</button>
+                </div>
+            </div>
+            <div class="card">
+                <ul id="${id}-historyList"></ul>
+            </div>
         `;
 
         // 渲染历史记录列表
@@ -196,15 +216,21 @@ function rerender(index) {
             const location = material.location;
             const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
             materialItem.innerHTML = `
-                <img src="${photo}" alt="${name}">
-                <p>ID: ${id}</p>
-                <p>名称: ${name}</p>
-                <p>位置: ${location}</p>
-                <p>描述: ${description}</p>
+                <div class="card">
+                    <div class="square-image">
+                        <img src="${photo}" alt="${name}">
+                    </div>
+                    <div class="info">
+                        <p>ID: ${id}</p>
+                        <p>名称: ${name}</p>
+                        <p>位置: ${location}</p>
+                        <p>描述: ${description}</p>
 
-                <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
-                <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
-                <button onclick="showHistory('${id}')">详情</button>
+                        <button onclick="deleteMaterial('${id}', '${name}')">删除</button>
+                        <button onclick="showEditForm('${id}', '${name}', '${description}', '${location}')">编辑</button>
+                        <button onclick="showHistory('${id}')">详情</button>
+                    </div>
+                </div>
             `;
         })
 }

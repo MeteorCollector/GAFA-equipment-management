@@ -1,17 +1,135 @@
+p {
+    font-size: 18px;
+    font-family: "Lucida Console", "Consolas";
+    line-height: 28px;
+}
+
+h1 {
+    font-size: 32px;
+    font-family: "Lucida Console", "Consolas";
+    line-height: 64px;
+}
+
+.back-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: #EFF4FF;
+}
+
 input {
     font-size: 18px;
     line-height: 26px;
     margin: 12px;
+    width: 30vw;
+    height: 32px;
 }
 
 button {
     font-size: 18px;
     line-height: 26px;
     margin: 12px;
+    width: 96px;
+    height: 32px;
+}
+
+.front {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: 	#8470FF;
+    color: white;
 }
 
 .add-form {
+    margin-top: 96px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: 	#8470FF;
+    color: white;
+}
+
+.add-material-form {
+    margin-top: 5vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    margin-bottom: 20vh;
+    border-radius: 10px;;
+    display: flex;
+    justify-content: left;
+    align-items: top;
+    transition: all 0.5s;
+    animation: fadeIn 1.5s;
+    background-color:rgba(255, 255, 255, 0.30);
+
+    padding: 5vw;
+}
+
+.edit-form {
+    position: fixed;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+.edit-material-form {
+    margin-top: 5vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    border-radius: 10px;;
+    border: 6px solid;
+    border-color: #8470FF;
+    display: flex;
+    justify-content: left;
+    align-items: top;
+    transition: all 0.5s;
+    animation: fadeIn 1.5s;
+    background-color:rgba(255, 255, 255, 1);
+
+    padding: 5vw;
+}
+
+.card {
+    margin-top: 5vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    border-radius: 10px;;
+    display: flex;
+    justify-content: left;
+    align-items: top;
+    transition: all 0.5s;
+    animation: fadeIn 1.5s;
+    background-color:rgba(255, 255, 255, 0.75)
+}
+
+.card:hover {
+    transform: translate(0, -10px);
+    /* background-color: cyan; */
+    box-shadow:0 16px 32px 0 rgba(48, 55, 66, 0.15);
+}
+
+.square-image {
+    width: 256px;
+    height: 256px;
+    overflow: hidden;
+    border-radius: 10px;;
+}
+
+.square-image img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info {
+    margin-left: 5vw;
+}
+

@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="gafa_style.css">
 </head>
 <body>
-    <h1>物资管理系统</h1>
+    <div class="back-container"></div>
+
+    <section class="front">
+    <h1>GAFA 物资管理系统 v0.0</h1>
+    </section>
+
     <section class="list">
     <div id="material-list">
         <!-- 物资列表将在此处动态生成 -->
@@ -15,27 +20,40 @@
     </section>
 
     <section class="add-form">
-    <form id="add-material-form">
-        <div><input type="text" id="material-name" placeholder="物资名称" required></div>
-        
-        <div><input type="file" id="material-photo" accept="images/*"></div>
-        <div><input type="text" id="material-description" placeholder="物资描述（可选）"></div>
-        <div><input type="text" id="material-location" placeholder="目前位置" required></div>
-        <div><button type="submit">添加物资</button></div>
-    </form>
+        <form id="add-material-form" class="add-material-form">
+            
+            <div>
+                <h2>添加物资</h2>
+                <p>上传一张照片：</p>
+                <input type="file" id="material-photo" accept="images/*">
+            </div>
+            <div>
+                <div><input type="text" id="material-name" placeholder="物资名称" required></div>
+                <div><input type="text" id="material-description" placeholder="物资描述（可选）"></div>
+                <div><input type="text" id="material-location" placeholder="目前位置" required></div>
+                <div><button type="submit">提交</button></div>
+            </div>
+        </form>
     </section>
 
     <section class="edit-form">
         <div id="edit-form" style="display: none;">
-            <h2>编辑物品信息</h2>
-            <form id="edit-material-form">
-                <input type="text" id="edit-material-id" disabled>
-                <input type="text" id="edit-material-name" placeholder="物品名称">
-                <input type="file" id="edit-material-photo" accept="image/*">
-                <input type="text" id="edit-material-description" placeholder="物品描述">
-                <input type="text" id="edit-material-location" placeholder="目前位置">
-                <button type="submit">更新</button>
-                <button type="button" onclick="cancelEdit()">取消</button>
+            
+            
+            <form id="edit-material-form" class="edit-material-form">
+                <div>
+                    <h2>编辑物品信息</h2>
+                    <p>上传一张照片：</p>
+                    <input type="file" id="edit-material-photo" accept="image/*">
+                    <input type="text" id="edit-material-id" disabled>
+                </div>
+                <div>
+                    <input type="text" id="edit-material-name" placeholder="物品名称">
+                    <input type="text" id="edit-material-description" placeholder="物品描述">
+                    <input type="text" id="edit-material-location" placeholder="目前位置">
+                    <button type="submit">更新</button>
+                    <button type="button" onclick="cancelEdit()">取消</button>
+                </div>
             </form>
         </div>
     </section>
