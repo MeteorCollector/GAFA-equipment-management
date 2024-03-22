@@ -57,16 +57,18 @@ def update_material(id):
             material['name'] = data.get('name', material['name'])
             material['description'] = data.get('description', material['description'])
             material['location'] = data.get('location', material['location'])
-
+        
             if 'photo' in request.files:
                 photo = request.files['photo']
                 filename = os.path.join(FRONT_ROOT, UPLOAD_FOLDER, photo.filename)
                 photo.save(filename)
                 filename = os.path.join(UPLOAD_FOLDER, photo.filename)
-                material[photo] = filename        
+                if (os.path.exists(os.path.join(FRONT_ROOT, material['photo']))):
+                    os.remove(os.path.join(FRONT_ROOT, material['photo']))
+                material['photo'] = filename
+            return jsonify(material), 201
 
-            return jsonify(material)
-    return jsonify({'error': 'Material not found'}), 404
+    return jsonify({'error': 'Material not found'}), 404  
 
 if __name__ == '__main__':
     app.run(port=6001, debug=True)
