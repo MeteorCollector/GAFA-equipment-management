@@ -234,3 +234,47 @@ function rerender(index) {
             `;
         })
 }
+
+
+
+
+// token
+
+// Function to display the overlay and modal
+function showModal() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('modal').style.display = 'block';
+}
+
+// Function to hide the overlay and modal
+function hideModal() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
+}
+
+// Function to check the entered token
+function checkToken() {
+    var enteredToken = document.getElementById('tokenInput').value;
+    
+    // Make an AJAX request to the backend
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", `http://${address}:6001/verify_token`, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Token is valid, hide modal
+                hideModal();
+            } else {
+                // Token is invalid, show alert
+                alert('Invalid token. Please try again.');
+            }
+        }
+    };
+    xhr.send(JSON.stringify({token: enteredToken}));
+}
+
+// Show modal when the page is loaded
+window.onload = function() {
+    showModal();
+};

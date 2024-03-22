@@ -15,9 +15,19 @@ CORS(app)
 DATA_FILE = 'materials.json'
 # 这里存放历史数据
 HISTORY_FOLDER = 'backup'
+# 这里存放token
+TOKENS_FILE = 'tokens.json'
+
+try:
+    with open(TOKENS_FILE, 'r') as file:
+        tokens_data = json.load(file)
+        valid_tokens = tokens_data['tokens']
+except FileNotFoundError:
+    valid_tokens = []
 
 FRONT_ROOT = '../web_front/'
 UPLOAD_FOLDER = 'uploads'  # 设置上传文件存储目录
+
 if not os.path.exists(FRONT_ROOT + UPLOAD_FOLDER):
     os.makedirs(FRONT_ROOT + UPLOAD_FOLDER)
 if not os.path.exists(HISTORY_FOLDER):
@@ -176,10 +186,20 @@ def get_material_history(id):
     else:
         return jsonify({'error': 'Material not found'}), 404
 
+@app.route('/verify_token', methods=['POST'])
+def verify_token():
+    data = request.get_json()
+    entered_token = data.get('token')
+
+    if entered_token in valid_tokens:
+        return jsonify({'message': 'Token is valid'}), 200
+    else:
+        return jsonify({'message': 'Invalid token'}), 401
+
 
 if __name__ == '__main__':
     schedule_thread = threading.Thread(target=schedule_loop)
     schedule_thread.setDaemon(True)
     schedule_thread.start()
 
-    app.run(port=6001, debug=True)
+    app.run(host='0.0.0.0', port=6001, debug=True)

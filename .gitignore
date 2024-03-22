@@ -7,3 +7,4 @@ python_back/materials.json
 *.pyd
 *.pyo
 privatehint.md
+*.json

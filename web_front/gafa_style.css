@@ -1,3 +1,5 @@
+
+
 p {
     font-size: 18px;
     font-family: "Lucida Console", "Consolas";
@@ -8,6 +10,37 @@ h1 {
     font-size: 32px;
     font-family: "Lucida Console", "Consolas";
     line-height: 64px;
+}
+
+h2 {
+    font-size: 26px;
+    font-family: "Lucida Console", "Consolas";
+    line-height: 64px;
+}
+
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    display: block;
+    z-index: 2;
+}
+
+#modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: block;
+    z-index: 3;
 }
 
 .back-container {
@@ -22,6 +55,7 @@ h1 {
 }
 
 input {
+    font-family: "Lucida Console", "Consolas";
     font-size: 18px;
     line-height: 26px;
     margin: 12px;
@@ -30,11 +64,12 @@ input {
 }
 
 button {
+    font-family: "Lucida Console", "Consolas";
     font-size: 18px;
     line-height: 26px;
     margin: 12px;
     width: 96px;
-    height: 32px;
+    height: 36px;
 }
 
 .front {
