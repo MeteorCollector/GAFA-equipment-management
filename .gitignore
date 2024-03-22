@@ -1,5 +1,7 @@
-webfront/images
+web_front/images
 python_back/data
+python_back/uploads
 *.pyc
 *.pyd
 *.pyo
+privatehint.md

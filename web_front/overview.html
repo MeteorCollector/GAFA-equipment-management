@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物资管理系统</title>
+    <link rel="stylesheet" href="gafa_style.css">
+</head>
+<body>
+    <h1>物资管理系统</h1>
+    <section class="list">
+    <div id="material-list">
+        <!-- 物资列表将在此处动态生成 -->
+    </div>
+    </section>
+
+    <section class="add-form">
+    <form id="add-material-form">
+        <div><input type="text" id="material-name" placeholder="物资名称" required></div>
+        
+        <div><input type="file" id="material-photo" accept="images/*"></div>
+        <div><input type="text" id="material-description" placeholder="物资描述（可选）"></div>
+        <div><input type="text" id="material-location" placeholder="目前位置" required></div>
+        <div><button type="submit">添加物资</button></div>
+    </form>
+    </section>
+
+    <script src="main_script.js"></script>
+</body>
+</html>
