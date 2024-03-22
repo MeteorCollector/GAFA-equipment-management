@@ -22,12 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const photo = photoInput.files[0]; // 获取用户选择的文件
         const description = document.getElementById('material-description').value;
         const location = document.getElementById('material-location').value;
+        const timestamp = new Date().toISOString(); // 获取当前时间
 
         const formData = new FormData();
         formData.append('name', name);
         formData.append('photo', photo);
         formData.append('description', description);
         formData.append('location', location);
+        formData.append('timestamp', timestamp); // 将时间信息添加到表单中
 
         fetch(`http://${address}:6001/materials`, {
             method: 'POST',
@@ -78,12 +80,14 @@ editMaterialForm.addEventListener('submit', event => {
     const photo = photoInput.files[0];
     const description = document.getElementById('edit-material-description').value;
     const location = document.getElementById('edit-material-location').value;
+    const timestamp = new Date().toISOString(); // 获取当前时间
 
     const formData = new FormData();
     formData.append('name', name);
     formData.append('photo', photo);
     formData.append('description', description);
     formData.append('location', location);
+    formData.append('timestamp', timestamp); // 将时间信息添加到表单中
 
     fetch(`http://${address}:6001/materials/${id}`, {
         method: 'PUT',
@@ -98,6 +102,7 @@ editMaterialForm.addEventListener('submit', event => {
             <p>名称: ${updatedMaterial.name}</p>
             <p>位置: ${updatedMaterial.location}</p>
             <p>描述: ${updatedMaterial.description}</p>
+
             <button onclick="deleteMaterial('${updatedMaterial.id}', '${updatedMaterial.name}')">删除</button>
             <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
         `;
