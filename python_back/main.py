@@ -6,9 +6,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+FRONT_ROOT = '../web_front/'
 UPLOAD_FOLDER = 'uploads'  # 设置上传文件存储目录
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+if not os.path.exists(FRONT_ROOT + UPLOAD_FOLDER):
+    os.makedirs(FRONT_ROOT + UPLOAD_FOLDER)
 
 materials = []
 
@@ -29,8 +30,9 @@ def add_material():
     # 保存上传的图片
     if 'photo' in request.files:
         photo = request.files['photo']
-        filename = os.path.join(UPLOAD_FOLDER, photo.filename)
+        filename = os.path.join(FRONT_ROOT, UPLOAD_FOLDER, photo.filename)
         photo.save(filename)
+        filename = os.path.join(UPLOAD_FOLDER, photo.filename)
     else:
         filename = ''
 
@@ -48,12 +50,21 @@ def delete_material(id):
 # 更新物资信息
 @app.route('/materials/<string:id>', methods=['PUT'])
 def update_material(id):
-    data = request.json
+    data = request.form
+
     for material in materials:
         if material['id'] == id:
             material['name'] = data.get('name', material['name'])
             material['description'] = data.get('description', material['description'])
             material['location'] = data.get('location', material['location'])
+
+            if 'photo' in request.files:
+                photo = request.files['photo']
+                filename = os.path.join(FRONT_ROOT, UPLOAD_FOLDER, photo.filename)
+                photo.save(filename)
+                filename = os.path.join(UPLOAD_FOLDER, photo.filename)
+                material[photo] = filename        
+
             return jsonify(material)
     return jsonify({'error': 'Material not found'}), 404
 

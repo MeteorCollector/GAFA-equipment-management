@@ -1,11 +1,12 @@
 const materialList = document.getElementById('material-list');
+const editForm = document.getElementById('edit-form');
+const editMaterialForm = document.getElementById('edit-material-form');
 const addMaterialForm = document.getElementById('add-material-form');
-const address = 'http://127.0.0.1:6001'
+const address = "127.0.0.1";
 
 document.addEventListener('DOMContentLoaded', () => {
-
     // 获取所有物资
-    fetch(`${address}/materials`, { method: 'GET' })
+    fetch(`http://${address}:6001/materials`)
         .then(response => response.json())
         .then(materials => {
             materials.forEach(material => {
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('description', description);
         formData.append('location', location);
 
-        fetch(`${address}/materials`, {
+        fetch(`http://${address}:6001/materials`, {
             method: 'POST',
             body: formData
         })
@@ -39,54 +40,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addMaterialForm.reset();
     });
+
+    
 });
-
-// 删除物资
-function deleteMaterial(id) {
-    fetch(`${address}/materials/${id}`, {
-        method: 'DELETE'
-    })
-    .then(() => {
-        const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
-        materialItem.remove();
-    });
-}
-
-// 更新物资
-function updateMaterial(id) {
-    const newName = prompt('请输入新的物资名称:');
-    const newLocation = prompt('请输入新的位置:');
-
-    fetch(`${address}/materials/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name: newName, location: newLocation })
-    })
-    .then(response => response.json())
-    .then(updatedMaterial => {
-        const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
-        materialItem.innerHTML = `
-            <p>ID: ${updatedMaterial.id}</p>
-            <p>名称: ${updatedMaterial.name}</p>
-            <p>位置: ${updatedMaterial.location}</p>
-            <button onclick="deleteMaterial('${updatedMaterial.id}')">删除</button>
-            <button onclick="updateMaterial('${updatedMaterial.id}')">更新</button>
-        `;
-    });
-}
 
 // 渲染物资
 function renderMaterial(material) {
     const materialItem = document.createElement('div');
     materialItem.dataset.id = material.id;
     materialItem.innerHTML = `
+        <img src="${material.photo}" alt="${material.name}">
         <p>ID: ${material.id}</p>
         <p>名称: ${material.name}</p>
         <p>位置: ${material.location}</p>
+        <p>描述: ${material.description}</p>
         <button onclick="deleteMaterial('${material.id}')">删除</button>
-        <button onclick="updateMaterial('${material.id}')">更新</button>
+        <button onclick="showEditForm('${material.id}', '${material.name}', '${material.description}', '${material.location}')">编辑</button>
     `;
     materialList.appendChild(materialItem);
+}
+
+// 显示编辑表单
+function showEditForm(id, name, description, location) {
+    document.getElementById('edit-material-id').value = id;
+    document.getElementById('edit-material-name').value = name;
+    document.getElementById('edit-material-description').value = description;
+    document.getElementById('edit-material-location').value = location;
+    editForm.style.display = 'block';
+}
+
+// 更新物资信息
+editMaterialForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const id = document.getElementById('edit-material-id').value;
+    const name = document.getElementById('edit-material-name').value;
+    const photoInput = document.getElementById('edit-material-photo');
+    const photo = photoInput.files[0];
+    const description = document.getElementById('edit-material-description').value;
+    const location = document.getElementById('edit-material-location').value;
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('photo', photo);
+    formData.append('description', description);
+    formData.append('location', location);
+
+    fetch(`http://${address}:6001/materials/${id}`, {
+        method: 'PUT',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(updatedMaterial => {
+        const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
+        materialItem.innerHTML = `
+            <img src="${updatedMaterial.photo}" alt="${updatedMaterial.name}">
+            <p>ID: ${updatedMaterial.id}</p>
+            <p>名称: ${updatedMaterial.name}</p>
+            <p>位置: ${updatedMaterial.location}</p>
+            <p>描述: ${updatedMaterial.description}</p>
+            <button onclick="deleteMaterial('${updatedMaterial.id}')">删除</button>
+            <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
+        `;
+        editForm.style.display = 'none';
+    });
+
+    
+});
+
+// 取消编辑
+function cancelEdit() {
+    editForm.style.display = 'none';
 }
