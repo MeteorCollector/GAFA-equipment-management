@@ -1,6 +1,7 @@
-web_front/images
-python_back/data
-python_back/uploads
+web_front/images/
+python_back/data/
+python_back/uploads/
+python_back/materials.json
 *.pyc
 *.pyd
 *.pyo
