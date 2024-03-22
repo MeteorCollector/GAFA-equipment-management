@@ -54,7 +54,7 @@ function renderMaterial(material) {
         <p>名称: ${material.name}</p>
         <p>位置: ${material.location}</p>
         <p>描述: ${material.description}</p>
-        <button onclick="deleteMaterial('${material.id}')">删除</button>
+        <button onclick="deleteMaterial('${material.id}', '${material.name}')">删除</button>
         <button onclick="showEditForm('${material.id}', '${material.name}', '${material.description}', '${material.location}')">编辑</button>
     `;
     materialList.appendChild(materialItem);
@@ -98,7 +98,7 @@ editMaterialForm.addEventListener('submit', event => {
             <p>名称: ${updatedMaterial.name}</p>
             <p>位置: ${updatedMaterial.location}</p>
             <p>描述: ${updatedMaterial.description}</p>
-            <button onclick="deleteMaterial('${updatedMaterial.id}')">删除</button>
+            <button onclick="deleteMaterial('${updatedMaterial.id}', '${updatedMaterial.name}')">删除</button>
             <button onclick="showEditForm('${updatedMaterial.id}', '${updatedMaterial.name}', '${updatedMaterial.description}', '${updatedMaterial.location}')">编辑</button>
         `;
         editForm.style.display = 'none';
@@ -110,4 +110,19 @@ editMaterialForm.addEventListener('submit', event => {
 // 取消编辑
 function cancelEdit() {
     editForm.style.display = 'none';
+}
+
+// 删除物资
+function deleteMaterial(id, name) {
+    const confirmDelete = confirm(`确定要删除 ${name} 吗？这件物品会消失很久（真的很久！）`); // 弹出确认框
+
+    if (confirmDelete) {
+        fetch(`http://${address}:6001/materials/${id}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            const materialItem = document.querySelector(`#material-list div[data-id="${id}"]`);
+            materialItem.remove();
+        });
+    }
 }
