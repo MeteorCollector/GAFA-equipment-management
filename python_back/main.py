@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from uuid import uuid4
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 UPLOAD_FOLDER = 'uploads'  # 设置上传文件存储目录
 if not os.path.exists(UPLOAD_FOLDER):

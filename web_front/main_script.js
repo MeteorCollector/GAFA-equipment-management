@@ -1,10 +1,11 @@
+const materialList = document.getElementById('material-list');
+const addMaterialForm = document.getElementById('add-material-form');
+const address = 'http://127.0.0.1:6001'
+
 document.addEventListener('DOMContentLoaded', () => {
-    const materialList = document.getElementById('material-list');
-    const addMaterialForm = document.getElementById('add-material-form');
-    const address = '127.0.0.1:6001'
 
     // 获取所有物资
-    fetch(`${address}/materials`)
+    fetch(`${address}/materials`, { method: 'GET' })
         .then(response => response.json())
         .then(materials => {
             materials.forEach(material => {
